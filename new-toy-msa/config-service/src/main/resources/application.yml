@@ -4,9 +4,15 @@ server:
 spring:
   application:
     name: config-service
+  profiles:
+    active: git
   cloud:
     config:
       server:
+        native:
+          search-locations: file:///Users/kimchanghee/이직준비/git-local-repo
         git: #default
-          uri: file:///Users/kimchanghee/이직준비/git-local-repo
-          default-label: master
+          uri: https://github.com/kimchanghee94/Spring_Cloud_Config
+          default-label: main
+#          username: [username]
+#          password: [password]
