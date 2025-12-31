@@ -11,6 +11,8 @@ eureka:
 spring:
   application:
     name: apigateway-service
+#  config:
+#    import: "optional:configserver:http://localhost:8888"
   cloud:
     gateway:
       server:
@@ -77,5 +79,16 @@ spring:
                     preLogger: true
                     postLogger: true
 
-token:
-  secret: my-very-long-secret-key-1234567890123456
+#token:
+#  secret: my-very-long-secret-key-1234567890123456
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - refresh
+          - health
+          - beans
+          - info
+          - httpexchanges
