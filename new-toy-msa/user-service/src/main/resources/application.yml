@@ -41,6 +41,11 @@ eureka:
       fetch-registry: true
       register-with-eureka: true
 
+logging:
+  level:
+    org.springframework.security: DEBUG
+    com.example.userservice.client: DEBUG
+
 greeting:
   message: Welcome to the Simple E-commerce (spring boot)
 
