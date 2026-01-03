@@ -1,5 +1,6 @@
 package com.example.userservice.service;
 
+import com.example.userservice.client.OrderServiceClient;
 import com.example.userservice.dto.UserDto;
 import com.example.userservice.jpa.UserEntity;
 import com.example.userservice.jpa.UserRepository;
@@ -27,16 +28,18 @@ import java.util.UUID;
 @Slf4j
 public class UserServiceImpl implements UserService {
     Environment env;
-
     UserRepository userRepository;
     BCryptPasswordEncoder passwordEncoder;
     RestTemplate restTemplate;
+    OrderServiceClient orderServiceClient;
 
-    public UserServiceImpl(Environment env, UserRepository userRepository, BCryptPasswordEncoder passwordEncoder, RestTemplate restTemplate) {
+
+    public UserServiceImpl(Environment env, UserRepository userRepository, BCryptPasswordEncoder passwordEncoder, RestTemplate restTemplate, OrderServiceClient orderServiceClient) {
         this.env = env;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.restTemplate = restTemplate;
+        this.orderServiceClient = orderServiceClient;
     }
 
     @Override
@@ -70,9 +73,13 @@ public class UserServiceImpl implements UserService {
             throw new UsernameNotFoundException("User not found");
         UserDto userDto = new ModelMapper().map(userEntity, UserDto.class);
 
-        String orderUrl = String.format(env.getProperty("order-service.url"), userId);
-        ResponseEntity<List<ResponseOrder>> orderListResponse = restTemplate.exchange(orderUrl, HttpMethod.GET, null, new ParameterizedTypeReference<>() {});
-        List<ResponseOrder> orderList = orderListResponse.getBody();
+//>>>REST TEMPLATE
+//        String orderUrl = String.format(env.getProperty("order-service.url"), userId);
+//        ResponseEntity<List<ResponseOrder>> orderListResponse = restTemplate.exchange(orderUrl, HttpMethod.GET, null, new ParameterizedTypeReference<>() {});
+//        List<ResponseOrder> orderList = orderListResponse.getBody();
+
+//>>>OPEN FEIGN
+        List<ResponseOrder> orderList = orderServiceClient.getOrders(userId);
         userDto.setOrders(orderList);
 
         return userDto;
