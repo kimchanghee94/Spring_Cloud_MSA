@@ -22,9 +22,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @RestController
 @RequestMapping("/order-service")
-@Slf4j
 public class OrderController {
     Environment env;
     OrderService orderService;
@@ -68,7 +68,8 @@ public class OrderController {
 //        kafkaProducer.send("example-catalog-topic", orderDto);
 //        orderProducer.send("orders", orderDto);
 //        ResponseOrder responseOrder = mapper.map(orderDto, ResponseOrder.class);
-        
+
+        log.info("After add orders data");
         return ResponseEntity.status(HttpStatus.CREATED).body(responseOrder);
     }
 
@@ -82,8 +83,15 @@ public class OrderController {
             result.add(new ModelMapper().map(v, ResponseOrder.class));
         });
 
+        try{
+            Thread.sleep(1000);
+            throw new Exception("장애발생");
+        }catch (InterruptedException e){
+            log.warn(e.getMessage());
+        }
         log.info("Add retrieved orders data");
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 }
+
