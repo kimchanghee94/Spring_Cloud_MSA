@@ -35,6 +35,7 @@ spring:
               filters:
                 - RemoveRequestHeader=Cookie
                 - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+
             - id: user-service-login
               uri: lb://USER-SERVICE
               predicates:
@@ -43,6 +44,7 @@ spring:
               filters:
                 - RemoveRequestHeader=Cookie
                 - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+
             - id: user-service
               uri: lb://USER-SERVICE
               predicates:
@@ -52,6 +54,7 @@ spring:
                 - RemoveRequestHeader=Cookie
                 - RewritePath=/user-service/(?<segment>.*), /$\{segment}
                 - AuthorizationHeaderFilter
+
             - id: user-service
               uri: lb://USER-SERVICE
               predicates:
@@ -60,14 +63,23 @@ spring:
               filters:
                 - RemoveRequestHeader=Cookie
                 - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+
             - id: catalog-service
               uri: lb://CATALOG-SERVICE
               predicates:
                 - Path=/catalog-service/**
+
+            - id: order-service
+              uri: lb://ORDER-SERVICE
+              predicates:
+                - Path=/order-service/actuator/**
+                - Method=GET
+
             - id: order-service
               uri: lb://ORDER-SERVICE
               predicates:
                 - Path=/order-service/**
+
             - id: first-service
               uri: lb://MY-FIRST-SERVICE
               predicates:
@@ -76,6 +88,7 @@ spring:
 #                - AddRequestHeader=f-request, 1st-request-header-by-yaml
 #                - AddResponseHeader=f-response, 1st-response-header-from-yaml
                 - CustomFilter
+                
             - id: second-service
               uri: lb://MY-SECOND-SERVICE
               predicates:
